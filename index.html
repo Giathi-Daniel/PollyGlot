@@ -16,7 +16,58 @@
 </head>
 <body>
     <div class="app-container">
-        hello
+        <!-- ==== HEADER ==== -->
+        <div class="header">
+            <div class="prt-img">
+                <img src="assets/parrot.png" id="parrot" alt="parrot">
+            </div>
+            <div class="header-txt">
+                <h1>PollyGlot</h1>
+                <p>Perfect Translation Every Time</p>
+            </div>
+        </div>
+
+        <!-- ==== BODY ==== -->
+        <div class="txt-container">
+            <div class="txt-box">
+                <h1>Text to translate 👇</h1>
+                <div class="input-box">
+                    <textarea id="input"></textarea>
+                </div>
+            </div>
+            <div class="lang-box">
+                <h1>Select language 👇</h1>
+                <ul>
+                    <li>
+                        <label>
+                            <input type="radio" class="language-checkbox" value="fr"> <!-- French Checkbox -->
+                            French
+                            <img src="assets/fr-flag.png" alt="french-flag">
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" class="language-checkbox" value="es"> <!-- Spanish Checkbox -->
+                            Spanish
+                            <img src="assets/sp-flag.png" alt="spanish-flag">
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" class="language-checkbox" value="de"> <!-- German Checkbox -->
+                            Japanese
+                            <img src="assets/jpn-flag.png" alt="Japanese-flag">
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="txt-btn">
+                <button id="translate-btn" type="button">
+                    Translate
+                </button>
+            </div>
+        </div>
     </div>
 </body>
 </html>
