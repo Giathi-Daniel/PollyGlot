@@ -1,4 +1,4 @@
-const apiKey = 'OPENAI_API_KEY';
+const apiKey = 'OPENAI_API_KEY'; // Keep the API key if needed for backend, not in frontend
 
 // DOM Elements
 const inputText = document.getElementById('input');
@@ -10,7 +10,7 @@ const langBox = document.querySelector('.lang-box');
 const langBoxTitle = document.querySelector('.lang-box h1');
 const langBoxUl = document.querySelector('.lang-box ul');
 
-//Translate Button
+// Translate Button
 translateButton.addEventListener('click', async () => {
     const text = inputText.value.trim();
     const selectedLanguage = getSelectedLanguage();
@@ -29,9 +29,26 @@ translateButton.addEventListener('click', async () => {
     translateButton.disabled = true;
 
     try {
-        const translation = await getTranslation(text, selectedLanguage);
+        // Make request to backend API
+        const response = await fetch('http://localhost:3000/translate', { // Ensure correct backend URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: text,
+                targetLanguage: selectedLanguage
+            })
+        });
 
-        // Update UI to show original and translated text
+        if (!response.ok) {
+            throw new Error('Failed to get translation');
+        }
+
+        const data = await response.json();
+        const translation = data.translation;
+
+        // Update UI with translation
         txtBox.textContent = 'Original Text 👇';
         langBoxTitle.textContent = 'Your Translation 👇';
 
@@ -47,7 +64,7 @@ translateButton.addEventListener('click', async () => {
         translationTextarea.style.marginTop = '10px';
 
         // Clear language selection and add translated text
-        langBoxUl.innerHTML = ''; 
+        langBoxUl.innerHTML = ''; // Remove language selection
         langBoxUl.appendChild(translationTextarea);
 
         // Change button to "Start Over"
@@ -56,60 +73,11 @@ translateButton.addEventListener('click', async () => {
         translateButton.onclick = resetApp;
     } catch (error) {
         console.error('Translation Error:', error);
-
-        // Clear out any dynamic content even if there's an error
-        langBoxUl.innerHTML = ''; 
-        langBoxUl.innerHTML = `
-            <li><label><input type="radio" class="language-checkbox" value="fr"> French <img src="assets/fr-flag.png" alt="french-flag"></label></li>
-            <li><label><input type="radio" class="language-checkbox" value="es"> Spanish <img src="assets/sp-flag.png" alt="spanish-flag"></label></li>
-            <li><label><input type="radio" class="language-checkbox" value="de"> Japanese <img src="assets/jpn-flag.png" alt="japanese-flag"></label></li>
-        `;  // Restore original language selection
-
-        // Reset UI components to prevent the broken state
-        txtBox.textContent = 'Text to translate 👇';
-        langBoxTitle.textContent = 'Select language 👇';
-
-        inputText.disabled = false;  // Re-enable the text input field
-
-        // Reset button
+        alert('Error: Unable to fetch translation. Please try again later.');
         translateButton.textContent = 'Translate';
         translateButton.disabled = false;
-        translateButton.onclick = null;
-
-        alert('Error: Unable to fetch translation. Please try again later.');
     }
 });
-
-
-// OpenAI API Call Function
-async function getTranslation(text, targetLanguage) {
-    const prompt = `Translate the following text to ${targetLanguage}: "${text}"`;
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-            model: 'gpt-4o', 
-            messages: [
-                { role: 'system', content: 'You are a helpful translation assistant.' },
-                { role: 'user', content: prompt }
-            ],
-            max_tokens: 100,
-            temperature: 0.7
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error(`API request failed with status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content;
-}
-
 
 // Get selected language value
 function getSelectedLanguage() {
@@ -154,4 +122,3 @@ function resetApp() {
     translateButton.textContent = 'Translate';
     translateButton.onclick = null;
 }
-

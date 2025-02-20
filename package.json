@@ -1,5 +1,5 @@
 {
-  "name": "Scrim-s05rqc4",
+  "name": "scrim-s05rqc4",
   "description": "https://scrimba.com/the-ai-engineer-path-c02v/~0o/s01nm41f7v/head",
   "scripts": {
     "start": "vite",
@@ -8,7 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2",
     "vite": "latest"
   },
-  "devDependencies": {}
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
